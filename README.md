@@ -42,6 +42,15 @@ Each theme is then crossed with its approval rates to separate broadly supported
 
 The raw data belongs to Make.org and **is not shared in this repository**. Only code, aggregated results and analyses are published.
 
+## Setup
+
+```bash
+pip install -r requirements.txt
+nbstripout --install   # strips notebook outputs automatically before each commit
+```
+
+Place the Make.org data files in `data/raw/`. This folder is ignored by Git: never commit the data.
+
 ## Tech stack
 
 Python, pandas, Gensim (Word2Vec), scikit-learn, sentence-transformers / Hugging Face, UMAP / t-SNE, an LLM API for steps 4 and 5. Versioned with Git and GitHub.
