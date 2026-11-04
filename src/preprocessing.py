@@ -1,1 +1,1 @@
-"""Fonctions de nettoyage communes aux notebooks."""
+"""Shared text cleaning functions used across notebooks."""
