@@ -223,6 +223,12 @@ __marimo__/
 data/
 *.xlsx
 *.csv
+*.parquet
+*.pkl
+*.pickle
+*.npy
+*.npz
+*.json
 
 # --- MODELES LOURDS ---
 models/
