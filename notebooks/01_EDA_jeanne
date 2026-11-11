@@ -1,0 +1,65 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import nltk
+from nltk.corpus import stopwords
+
+data = pd.read_excel("MasterSmartData_IA_propositions.xlsx")
+data = data.rename(columns= {"Âge":"Age", "Nom d'auteur":"Author Name","Code postal":"Postal Code","Nb de votes":"Number of votes",
+            "% pour":"% for", "% contre":"% against", "% neutre":"% neutral"})
+data['% for'] = data['% for']*100
+data['% against'] = data['% against']*100
+data['% neutral'] = data['% neutral']*100
+
+
+print(data.head)
+print(data.shape)
+
+summary = data.describe().T
+summary.to_excel("Datasummary.xlsx")
+data.info()
+data.isnull().sum()
+
+def wordcounter(cell):
+  if pd.isna(cell):
+    return 0
+  return len(str(cell).split())
+data["Wordcounter"] = data["Proposition"].apply(wordcounter)
+
+data["Wordcounter"].describe().T
+
+
+sns.histplot(
+    data=data, 
+    x= data["Postal Code"], 
+    bins=10,            
+    #kde=True,         
+    color='steelblue', 
+    edgecolor='black'
+)
+plt.show()
+
+sample = data.sample(n=50, random_state = 1)
+sample.to_excel("Sample50.xlsx")
+
+data['Postal Code'] = data['Postal Code'].astype(str).str.zfill(5)
+data['Department'] = data['Postal Code'].str[:2]
+dep = data['Department']
+depc = dep.value_counts()
+depc.to_excel("Count Departments.xlsx")
+
+nltk.download('stopwords')
+stop_words = set(stopwords.words('french'))
+sup = {'faut'}
+stop_words.update(sup)
+
+words = (
+    data['Proposition']
+    .dropna()                             
+    .str.lower()                
+    .str.findall(r'\b\w+\b')               
+    .explode()                        
+)
+
+wordfreq = words[~words.isin(stop_words)].value_counts()
+wordfreq.head(30).to_excel("Mots courants.xlsx")
