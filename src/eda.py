@@ -35,6 +35,42 @@ def column_summary(df):
 
 
 # ---------------------------------------------------------------------------
+# Author metadata (optional variables: age, postal code)
+# ---------------------------------------------------------------------------
+
+def plot_age(df, bins=30):
+    """Histogram of author age (missing values excluded)."""
+    ages = df["Âge"].dropna()
+    fig, ax = plt.subplots(figsize=(7, 3.5))
+    ax.hist(ages, bins=bins, color="steelblue")
+    ax.set_xlabel("Author age")
+    ax.set_ylabel("Number of proposals")
+    ax.set_title(f"Author age (n = {len(ages)}, missing = {df['Âge'].isna().sum()})")
+    return fig
+
+
+def department_counts(df):
+    """Number of proposals per department (first 2 digits of the postal code).
+
+    Requires the postal code normalized by preprocessing.load_data.
+    Note: Corsica (2A/2B) appears as "20".
+    """
+    departments = df["Code postal"].dropna().str[:2]
+    return departments.value_counts().rename_axis("department").rename("count").to_frame()
+
+
+def plot_departments(df, n=20):
+    """Bar chart of the departments with the most proposals."""
+    counts = department_counts(df)["count"].head(n)
+    fig, ax = plt.subplots(figsize=(8, 3.5))
+    ax.bar(counts.index, counts.values, color="steelblue")
+    ax.set_xlabel("Department")
+    ax.set_ylabel("Number of proposals")
+    ax.set_title(f"Top {n} departments (postal code known for {df['Code postal'].notna().sum()} proposals)")
+    return fig
+
+
+# ---------------------------------------------------------------------------
 # Votes
 # ---------------------------------------------------------------------------
 
@@ -123,9 +159,15 @@ def vocabulary_summary(token_lists, min_count=5):
     })
 
 
-def top_words(token_lists, n=30):
-    """Most frequent words with their counts."""
-    return pd.DataFrame(word_counts(token_lists).most_common(n), columns=["word", "count"])
+def top_words(token_lists, n=30, exclude=None):
+    """Most frequent words with their counts.
+
+    exclude: optional set of words to ignore (e.g. a stopword list).
+    """
+    counts = word_counts(token_lists)
+    if exclude:
+        counts = Counter({w: c for w, c in counts.items() if w not in exclude})
+    return pd.DataFrame(counts.most_common(n), columns=["word", "count"])
 
 
 def first_word_counts(token_lists, n=25):
