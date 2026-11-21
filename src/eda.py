@@ -159,6 +159,17 @@ def vocabulary_summary(token_lists, min_count=5):
     })
 
 
+def compare_vocabularies(corpora, min_count=5):
+    """Vocabulary summary side by side for several versions of the corpus.
+
+    corpora: dict {name: series of token lists}, e.g. raw tokens vs lemmas.
+    """
+    return pd.DataFrame({
+        name: vocabulary_summary(tokens, min_count).values
+        for name, tokens in corpora.items()
+    }, index=vocabulary_summary(next(iter(corpora.values())), min_count).index)
+
+
 def top_words(token_lists, n=30, exclude=None):
     """Most frequent words with their counts.
 

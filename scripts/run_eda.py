@@ -14,7 +14,7 @@ matplotlib.use("Agg")  # save figures without opening windows
 import matplotlib.pyplot as plt
 
 from src import eda
-from src.preprocessing import PROJECT_ROOT, add_clean_columns, load_data
+from src.preprocessing import PROJECT_ROOT, add_clean_columns, add_lemma_columns, load_data
 
 OUTPUT_DIR = PROJECT_ROOT / "outputs" / "eda"
 
@@ -35,6 +35,12 @@ def main():
 
     # Table overview (on raw columns only)
     save_table(eda.column_summary(raw), "01_column_summary")
+    save_table(raw.describe().T.round(2), "01_numeric_summary")
+
+    # Author metadata (optional)
+    save_figure(eda.plot_age(df), "01_age")
+    save_table(eda.department_counts(df), "01_department_counts")
+    save_figure(eda.plot_departments(df), "01_departments")
 
     # Votes
     save_table(eda.vote_share_summary(df), "02_vote_share_summary")
@@ -48,6 +54,15 @@ def main():
     save_table(eda.vocabulary_summary(df["tokens"]).to_frame("value"), "03_vocabulary_summary")
     save_table(eda.top_words(df["tokens"]), "03_top_words")
     save_table(eda.first_word_counts(df["tokens"]), "03_first_words")
+
+    # Effect of preprocessing (spaCy lemmatization and stopword removal)
+    df = add_lemma_columns(df)
+    save_table(eda.compare_vocabularies({
+        "raw_tokens": df["tokens"],
+        "lemmas": df["lemmas_all"],
+        "lemmas_no_stopwords": df["lemmas"],
+    }), "04_preprocessing_effect")
+    save_table(eda.top_words(df["lemmas"]), "04_top_lemmas_no_stopwords")
 
     print(f"EDA outputs saved to {OUTPUT_DIR}")
 
