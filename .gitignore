@@ -235,3 +235,10 @@ models/
 *.bin
 *.model
 *.pt
+
+# Personal exploration notebooks (local only)
+*.ipynb
+notebooks/archive/
+
+# Generated results (contain numbers)
+outputs/
