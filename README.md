@@ -47,6 +47,7 @@ The raw data belongs to Make.org and **is not shared in this repository**. Only 
 ```bash
 pip install -r requirements.txt
 nbstripout --install   # strips notebook outputs automatically before each commit
+python -m spacy download fr_core_news_md
 ```
 
 Place the Make.org data files in `data/raw/`. This folder is ignored by Git: never commit the data.
