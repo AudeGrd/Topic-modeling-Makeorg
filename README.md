@@ -22,7 +22,7 @@ There are no labels: as in most customer and citizen insight studies, the task i
 
 | Step | Content | Status |
 |---|---|---|
-| 1. Exploratory analysis | Proposal length and vocabulary, vote distributions, most consensual and most divisive proposals; NLP preprocessing (tokenisation, normalisation, stop words, lemmatisation) | ⏳ |
+| 1. Exploratory analysis | Proposal length and vocabulary, vote distributions, most consensual and most divisive proposals; NLP preprocessing (tokenisation, normalisation, stop words, lemmatisation) | ✅ |
 | 2. Word2Vec (local) | Model trained **on the corpus itself** rather than general-purpose pre-trained vectors, as the vocabulary and style are domain-specific. CBOW vs. Skip-gram, 20 to 100 dimensions, word-to-proposal aggregation (mean, TF-IDF weighting), clustering (e.g. K-Means), 2D projection (t-SNE / UMAP) | ⏳ |
 | 3. Sentence embeddings | Pre-trained open-source multilingual / French encoders (`sentence-transformers`, Hugging Face), with the **same clustering** as step 2 for a fair comparison | ⏳ |
 | 4. LLM prompting | Zero-shot / few-shot categorisation of a sample of proposals, compared with the vector-based clusters | ⏳ |
@@ -40,7 +40,7 @@ Each theme is then crossed with its approval rates to separate broadly supported
 
 ## Data
 
-The raw data belongs to Make.org and **is not shared in this repository**. Only code, aggregated results and analyses are published.
+The raw data belongs to Make.org and **is not shared in this repository**. Only code is published: no data, no results.
 
 ## Setup
 
